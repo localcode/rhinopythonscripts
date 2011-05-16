@@ -8,12 +8,12 @@ Some of these scripts may be generally useful for IronPython, and for interfacin
 
 For help and more information:
 
-    * [Grasshopper Scripting Forum](http://www.grasshopper3d.com/forum/categories/vb-c-and-python-coding/listForCategory)
-    * [RhinoPython Scripting Forum](http://python.rhino3d.com/)
-    * [RhinoCommon SDK](http://www.rhino3d.com/5/rhinocommon/)
-    * [McNeel GitHub repos](https://github.com/mcneel)
-    * [Help with GitHub](http://help.github.com/)
-    * [Pro Git](www.progit.org)
+* [Grasshopper Scripting Forum](http://www.grasshopper3d.com/forum/categories/vb-c-and-python-coding/listForCategory)
+* [RhinoPython Scripting Forum](http://python.rhino3d.com/)
+* [RhinoCommon SDK](http://www.rhino3d.com/5/rhinocommon/)
+* [McNeel GitHub repos](https://github.com/mcneel)
+* [Help with GitHub](http://help.github.com/)
+* [Pro Git](www.progit.org)
 
 
 ---
@@ -21,13 +21,13 @@ For help and more information:
 ## Currently Included Scripts
 
 
-* GeoJson2Rhino
+* #### GeoJson2Rhino
     
     A module for translating [GeoJSON](http://wiki.geojson.org/Main_Page) objects into Rhino objects, using RhinoCommon.
 
-* RunCPythonScript
+* #### RunCPythonScript
 
-    A function for running python scripts that do not play well with python. This script sends arguments to a script that is run on the normal CPython interpreter, and returns stdin, stdout, and stderr results. Obviously depends on having a [CPython](http://www.python.org/download/) (aka "traditional" Python) installed on the system.
+    A function for running python scripts that do not play well with IronPython. This script sends arguments to a script that is run on the normal CPython interpreter, and returns stdin, stdout, and stderr results. Obviously depends on having a [CPython](http://www.python.org/download/) (aka "traditional" Python) installed on the system.
 
 
 
