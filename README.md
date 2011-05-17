@@ -58,7 +58,7 @@ Then you can import scripts from you folder.
 
 ### To Import Into a Script
 
-The main folder, `rhinopythonscripts`, has been provided with an `__init__.py` file, so the whole thing can be treated as a package. Assuming your new script has access to the folder that teh `rhinopythonscripts` folder is _inside_ of, you can import various modules in the following way:
+The main folder, `rhinopythonscripts`, has been provided with an `__init__.py` file, so the whole thing can be treated as a package. Assuming your new script has access to the folder that the `rhinopythonscripts` folder is _inside_ of (see _Checking Your Path_ above), you can import various modules in the following way:
 
     from rhinopythonscripts import RunCPythonScript
     out = RunCPythonScript.run("someCPythonScript", argumentList)
@@ -69,6 +69,6 @@ or you can do stuff like this to import individual functions or give things shor
     from rhinopythonscripts import RunCPythonScript.run as runC
     out = runC("someCPythonScript", argumentList)
 
-### Using GitHub to Contribute
+### Using GitHub to Download, Update, and Contribute
 
 coming soon ...
