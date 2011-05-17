@@ -45,10 +45,9 @@ For help and more information:
 
 The following code will reveal what folders python can see. If folders are missing from the resulting list, then you cannot use the modules they contian.
 
-<div class="highlight" ><pre><span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">sys</span>
-<span style="color: #007020; font-weight: bold">for</span> directory <span style="color: #007020; font-weight: bold">in</span> sys<span style="color: #666666">.</span>path:
-    <span style="color: #007020; font-weight: bold">print</span> directory
-</pre></div>
+    import sys
+    for directory in sys.path:
+        print directory
 
 to add a folder to `sys.path`, assuming you already have the `import sys` line:
 
@@ -66,7 +65,7 @@ The main folder, `rhinopythonscripts`, has been provided with an `__init__.py` f
 or you can do stuff like this to import individual functions or give things shorter names:
 
     import rhinopythonscripts.InfraPy as ip
-    from rhinopythonscripts import RunCPythonScript.run as runC
+    from rhinopythonscripts.RunCPythonScript import run as runC
     out = runC("someCPythonScript", argumentList)
 
 ### Using GitHub to Download, Update, and Contribute
