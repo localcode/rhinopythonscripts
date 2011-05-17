@@ -17,7 +17,6 @@ For help and more information:
 * [Pro Git](http://www.progit.org) - For learning more about Git.
 * [StackOverflow](http://stackoverflow.com/) - For general programming questions.
 
----
 
 ## Currently Included Scripts
 
@@ -72,7 +71,7 @@ or you can do stuff like this to import individual functions or give things shor
 
 1. First, [install git](http://git-scm.com/) for your system and set it up.
 
-## Forking
+#### Forking
 
 1. [Fork the repository](http://help.github.com/fork-a-repo/) on GitHub.
 1. Get to the folder where you want things to be stored
@@ -86,19 +85,19 @@ or you can do stuff like this to import individual functions or give things shor
 
 1. Now you have created a folder, inside of whatever folder you were in, called `rhinopythonscripts`. Everything is inside of that folder and you can use it. :)
 
-## Updating
+#### Updating
 
 coming soon ...
 
-## Contributing
+#### Contributing
 
 coming soon ...
 
-## Quickly Patching Something in the Code
+#### Quickly Patching Something in the Code
 
 coming soon ...
 
-## Noting Issues
+#### Noting Issues
 
 coming soon ...
  
