@@ -8,7 +8,7 @@ Some of these scripts may be generally useful for IronPython, and for interfacin
 
 For help and more information:
 
-* [Rhino 5 Forums](www.v5.rhino3d.com)
+* [Rhino 5 Forums](http://v5.rhino3d.com)
 * [Grasshopper Scripting Forum](http://www.grasshopper3d.com/forum/categories/vb-c-and-python-coding/listForCategory)
 * [RhinoPython Scripting Forum](http://python.rhino3d.com/)
 * [RhinoCommon SDK](http://www.rhino3d.com/5/rhinocommon/)
