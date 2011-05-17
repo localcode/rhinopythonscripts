@@ -70,21 +70,21 @@ or you can do stuff like this to import individual functions or give things shor
 
 ### Using GitHub to Download, Update, and Contribute
 
-#. First, [install git](http://git-scm.com/) for your system and set it up.
+1. First, [install git](http://git-scm.com/) for your system and set it up.
 
 ## Forking
 
-#. [Fork the repository](http://help.github.com/fork-a-repo/) on GitHub.
-#. Get to the folder where you want things to be stored
+1. [Fork the repository](http://help.github.com/fork-a-repo/) on GitHub.
+1. Get to the folder where you want things to be stored
 
     * On Windows, open the Git Bash program, and use `cd foldername` and `cd ..` to get to the folder you want.
     * On Mac, open Terminal and use `cd foldername` and `cd ..` to get to the folder you want.
 
-#. Using Terminal (Mac) or Git Bash (Windows), use git to clone the repository onto your computer by typing the following command:
+1. Using Terminal (Mac) or Git Bash (Windows), use git to clone the repository onto your computer by typing the following command:
 
     `git clone git@github.com:yourusername/rhinopythonscripts.git` Where `yourusername` is replaced by your user name, obviously.
 
-#. Now you have created a folder, inside of whatever folder you were in, called `rhinopythonscripts`. Everything is inside of that folder and you can use it. :)
+1. Now you have created a folder, inside of whatever folder you were in, called `rhinopythonscripts`. Everything is inside of that folder and you can use it. :)
 
 ## Updating
 
