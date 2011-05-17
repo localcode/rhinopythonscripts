@@ -28,7 +28,7 @@ For help and more information:
 
 * #### RunCPythonScript
 
-    A function for running python scripts that do not play well with IronPython. This script sends arguments to a script that is run on the normal CPython interpreter, and returns stdin, stdout, and stderr results. Obviously depends on having a [CPython](http://www.python.org/download/) (aka "traditional" Python) installed on the system.
+    A function for running python scripts that do not play well with IronPython. This script sends arguments to a script that is run on the normal CPython interpreter, and returns stdout, stderr, and exit code results. Obviously depends on having a [CPython](http://www.python.org/download/) (aka "traditional" Python) installed on the system.
 
 * #### Make2D
     
