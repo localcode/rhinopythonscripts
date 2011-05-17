@@ -8,17 +8,16 @@ Some of these scripts may be generally useful for IronPython, and for interfacin
 
 For help and more information:
 
-* [Rhino 5 Forums](http://v5.rhino3d.com)
-* [Grasshopper Scripting Forum](http://www.grasshopper3d.com/forum/categories/vb-c-and-python-coding/listForCategory)
-* [RhinoPython Scripting Forum](http://python.rhino3d.com/)
-* [RhinoCommon SDK](http://www.rhino3d.com/5/rhinocommon/)
-* [McNeel GitHub repos](https://github.com/mcneel)
-* [Help with GitHub](http://help.github.com/)
-* [Pro Git](www.progit.org)
-
+* [Rhino 5 Forums](http://v5.rhino3d.com) - For help and suggestions about Rhino 5
+* [Grasshopper Scripting Forum](http://www.grasshopper3d.com/forum/categories/vb-c-and-python-coding/listForCategory) - For help with scripting in Grasshopper
+* [RhinoPython Scripting Forum](http://python.rhino3d.com/) - For help with scripting in Rhino.
+* [RhinoCommon SDK](http://www.rhino3d.com/5/rhinocommon/) - The API reference.
+* [McNeel GitHub repos](https://github.com/mcneel) - Official McNeel code repositories.
+* [Help with GitHub](http://help.github.com/) - For learning how to use Git and GitHub.
+* [Pro Git](http://www.progit.org) - For learning more about Git.
+* [StackOverflow](http://stackoverflow.com/) - For general programming questions.
 
 ---
-
 
 ## Currently Included Scripts
 
@@ -46,9 +45,10 @@ For help and more information:
 
 The following code will reveal what folders python can see. If folders are missing from the resulting list, then you cannot use the modules they contian.
 
-    import sys
-    for directory in sys.path:
-        print directory
+<div class="highlight" ><pre><span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">sys</span>
+<span style="color: #007020; font-weight: bold">for</span> directory <span style="color: #007020; font-weight: bold">in</span> sys<span style="color: #666666">.</span>path:
+    <span style="color: #007020; font-weight: bold">print</span> directory
+</pre></div>
 
 to add a folder to `sys.path`, assuming you already have the `import sys` line:
 
