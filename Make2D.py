@@ -17,7 +17,7 @@ def addRhinoLayer(layerName, layerColor=System.Drawing.Color.Black):
     if layerIndex == -1:
         layerIndex = docLyrs.Add(layerName,layerColor)
     return layerIndex
-    
+
 def layerAttributes(layerName, layerColor=System.Drawing.Color.Black):
     """Returns a Rhino ObjectAttributes object for a rhino layer with an optional color."""
     att = Rhino.DocObjects.ObjectAttributes()
@@ -32,7 +32,7 @@ def addBBoxOutlines():
     for curve in bCurves:
         doc.Objects.AddCurve(curve, bAtt)
     return True
-    
+
 def switchLayers(fromLayer, toLayer):
     """gets the objects on fromLayer and moves them to toLayer."""
     objs = doc.Objects.FindByLayer(fromLayer)
@@ -93,7 +93,7 @@ def crossMatch(list1, list2):
             pair = ( i, j )
             outList.append(pair)
     return outList
-    
+
 
 def configureLayers(layerConfigTable):
     for layerSettings in layerConfigTable:
@@ -151,16 +151,16 @@ def zoomToLayer(layerName):
 if __name__=="__main__":
     
     layerConfigurationTable = [
-                ("boundingBox", False, None),
-                ("viewLine", False, None),
-                ("BuildingVolumes", False, None)
-                              ]
+            ("boundingBox", False, None),
+            ("viewLine", False, None),
+            ("BuildingVolumes", False, None)
+            ]
     make2DLayerTable = [
-                ("TerrainWireframe - Hidden", False, None),
-                ("BuildingWireframes - Hidden", False, None),
-                ("BuildingVolumes", False, None),
-                ("LabelLines - Hidden", True, None)
-                              ]
+            ("TerrainWireframe - Hidden", False, None),
+            ("BuildingWireframes - Hidden", False, None),
+            ("BuildingVolumes", False, None),
+            ("LabelLines - Hidden", True, None)
+            ]
     
     files = listFiles("C:\\LocalCodeFullBatch\\AxoPrep", True, ".3dm")
     files = files[680:]
@@ -197,11 +197,11 @@ if __name__=="__main__":
         
         ## Do a make 2D
         app.RunScript("SelAll -Make2D DrawingLayout=CurrentView "
-        +"ShowTangentEdges=Yes "
-        +"CreateHiddenLines=Yes "
-        +"MaintainSourceLayers=Yes Enter "
-        +"-Invert Hide SetView World Top ZE SelNone",
-        False)
+                +"ShowTangentEdges=Yes "
+                +"CreateHiddenLines=Yes "
+                +"MaintainSourceLayers=Yes Enter "
+                +"-Invert Hide SetView World Top ZE SelNone",
+                False)
         
         switchLayers("viewportFramework - Hidden", "viewportFramework - Visible")
         
@@ -209,8 +209,8 @@ if __name__=="__main__":
         
         
         app.RunScript("SelAll -Export "+export
-        +" PreserveUnits=No "
-        +"ViewportBoundary=Yes Enter", False)
+                +" PreserveUnits=No "
+                +"ViewportBoundary=Yes Enter", False)
         
         
-        
+

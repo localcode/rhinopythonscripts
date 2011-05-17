@@ -1,18 +1,21 @@
 '''
-Created on Oct 24, 2010
+A bunch of functions for general use. For now these mostly deal with
+managing files and manipulating lists. I'm sure that many of these functions
+could be replaced by commands form the standard library, or simply better use
+python's existing commands.
 
-@author: Benjamin
+Contains the following commands:
+    listFiles(folder[, fullPath, fileExtension])
+    listToText(inputList[, folder, outputName])
+    editFilePrefix(oldPrefix, newPrefix, fileList)
+    editFileExt(oldExt, newExt, fileList)
+    linesToList(filePath)
+    chopList(indices, anyList)
+
 '''
 
 import os
 
-# Contains the following commands:
-#     listFiles(folder, fullPath, fileExtension)
-#     listToText(inputList, folder, outputName)
-#     editFilePrefix(oldPrefix, newPrefix, fileList)
-#     editFileExt(oldExt, newExt, fileList)
-#     linesToList(filePath)
-#     chopList(indices, anyList)
 
 def get_modules(output):
     f = open(output, 'w')
@@ -21,70 +24,17 @@ def get_modules(output):
     f.close()
 
 
-def excelToXML(filePath, headerHeight=1, includeDeclaration=True):
-    """
-    reads an excel file and converts each line to a separate XML object
-    Does not read the first line, but uses it for labelling each tag.
-    Returns the tab formatted XML text.
-    the headerHeight variable can be set to ignore larger
-    headers, in case there are more lines in the header than 1.
-    includeDeclaration is a boolean that determines if an xml declaration
-    should be included at the beginning of the string.
-    """
-
-
-
-def excelToJSON(filePath, headerHeight=1):
-    """
-    reads an excel file and converts each line to a separate JSON object
-    Does not read the first line, but instead uses it to extract labels
-    for the object attributes.
-    Returns the JSON format text, with one object per line.
-    the headerHeight variable can be set to ignore larger
-    headers, in case there are more lines in the header than 1.
-    """
-
-
-def xmlToJSON(xmlTextString):
-    """
-    reads a string of XML text and converts it to JSON format
-    returns the JSON formatted text.
-    """
-
-
-def jsonToXML(jsonTextString, includeDeclaration=True):
-    """
-    reads a string of JSON formatted text and converts it to
-    XML format. returns the formatted XML text.
-    includeDeclaration is a boolean that determines if an xml declaration
-    should be included at the beginning of the string.
-    """
-
-def excelToDjangoModel(filePath):
-    """
-    reads an excel file and uses the first two lines to create attributes
-    and data types for each attribute. The first line determines the name
-    of each attribute, and the second line determines the data type of each attribute.
-    returns a string that can be pasted into a models.py file for a django
-    app.
-    """
-
-
-
 def listFiles(folder, fullPath=False, fileExtension=None):
     """Returns a list of the files and folders in a given folder. The fullPath option determines whether it returns the
     full paths or just th efile names, and the fileExtension option restricts the result to files with a specific
     extension."""
     fileList = os.listdir(folder)
     if fullPath == True:
+        folderPath = os.path.abspath(folder)
         fpList = []
-        for file in fileList:
-            # this needs to be adjusted for the interpreter
-            # it seems that Rhino5 can take either \,/, or \\
-            # but that IDLE takes one type for each
-            # operating system
-            file = folder+'/'+file
-            fpList.append(file)
+        for filePath in fileList:
+            newFilePath = os.path.join(folderPath, filePath)
+            fpList.append(newFilePath)
         fileList = fpList
 
     if fileExtension != None:
@@ -145,24 +95,5 @@ def chopList(indices, anyList):
     for i in range(len(indexSpread) - 1):
         chunks.append(newList[indexSpread[i]:indexSpread[i+1]])
     return chunks
-
-
-if __name__=='__main__':
-
-    # these declared variables will need to be inputs
-    folder = '/LocalCodeFullBatch/GIS_data/bmpBuffers'
-    cnnFileFolder = '/LocalCodeFullBatch'
-    reportFile = cnnFileFolder + '/ShapefileImportReport.txt'
-
-
-    # load CNN list
-    bufferlist = listFiles(folder, fullPath=True, fileExtension='.shp')
-    blist = listFiles(folder, fullPath=False, fileExtension='.shp')
-    mPatchList = editFilePrefix('Buffers2_Buffer','MultiPatchTerrain', blist)
-    listToText(blist, cnnFileFolder, 'bufferList.txt')
-    listToText(mPatchList, cnnFileFolder, 'mPatchList.txt')
-
-
-
 
 

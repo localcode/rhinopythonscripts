@@ -8,6 +8,7 @@ Some of these scripts may be generally useful for IronPython, and for interfacin
 
 For help and more information:
 
+* [Rhino 5 Forums](www.v5.rhino3d.com)
 * [Grasshopper Scripting Forum](http://www.grasshopper3d.com/forum/categories/vb-c-and-python-coding/listForCategory)
 * [RhinoPython Scripting Forum](http://python.rhino3d.com/)
 * [RhinoCommon SDK](http://www.rhino3d.com/5/rhinocommon/)
@@ -29,6 +30,12 @@ For help and more information:
 
     A function for running python scripts that do not play well with IronPython. This script sends arguments to a script that is run on the normal CPython interpreter, and returns stdin, stdout, and stderr results. Obviously depends on having a [CPython](http://www.python.org/download/) (aka "traditional" Python) installed on the system.
 
+* #### Make2D
+    
+    A module for automatically setting up camera views and exporting Make2Ds from Rhino
 
+* #### InfraPy
+
+    A module with some very general functions for managing data. Not Rhino or IronPython specific.
 
 
