@@ -19,6 +19,7 @@ For help and more information:
 
 ---
 
+
 ## Currently Included Scripts
 
 
@@ -39,3 +40,35 @@ For help and more information:
     A module with some very general functions for managing data. Not Rhino or IronPython specific.
 
 
+## Basic Use
+
+### Checking Your Path
+
+The following code will reveal what folders python can see. If folders are missing from the resulting list, then you cannot use the modules they contian.
+
+    import sys
+    for directory in sys.path:
+        print directory
+
+to add a folder to `sys.path`, assuming you already have the `import sys` line:
+
+    sys.path.append("path/to/my/folder/that/contains/python/scripts")
+
+Then you can import scripts from you folder.
+
+### To Import Into a Script
+
+The main folder, `rhinopythonscripts`, has been provided with an `__init__.py` file, so the whole thing can be treated as a package. Assuming your new script has access to the folder that teh `rhinopythonscripts` folder is _inside_ of, you can import various modules in the following way:
+
+    from rhinopythonscripts import RunCPythonScript
+    out = RunCPythonScript.run("someCPythonScript", argumentList)
+
+or you can do stuff like this to import individual functions or give things shorter names:
+
+    import rhinopythonscripts.InfraPy as ip
+    from rhinopythonscripts import RunCPythonScript.run as runC
+    out = runC("someCPythonScript", argumentList)
+
+### Using GitHub to Contribute
+
+coming soon ...
