@@ -45,13 +45,17 @@ For help and more information:
 
 The following code will reveal what folders python can see. If folders are missing from the resulting list, then you cannot use the modules they contian.
 
-    import sys
-    for directory in sys.path:
-        print directory
+```python
+import sys
+for directory in sys.path:
+    print directory
+```
 
 to add a folder to `sys.path`, assuming you already have the `import sys` line:
 
-    sys.path.append("path/to/my/folder/that/contains/python/scripts")
+```python
+sys.path.append("path/to/my/folder/that/contains/python/scripts")
+```
 
 Then you can import scripts from you folder.
 
@@ -59,14 +63,18 @@ Then you can import scripts from you folder.
 
 The main folder, `rhinopythonscripts`, has been provided with an `__init__.py` file, so the whole thing can be treated as a package. Assuming your new script has access to the folder that the `rhinopythonscripts` folder is _inside_ of (see _Checking Your Path_ above), you can import various modules in the following way:
 
-    from rhinopythonscripts import RunCPythonScript
-    out = RunCPythonScript.run("someCPythonScript", argumentList)
+```python
+from rhinopythonscripts import RunCPythonScript
+out = RunCPythonScript.run("someCPythonScript", argumentList)
+```
 
 or you can do stuff like this to import individual functions or give things shorter names:
 
-    import rhinopythonscripts.InfraPy as ip
-    from rhinopythonscripts.RunCPythonScript import run as runC
-    out = runC("someCPythonScript", argumentList)
+```python
+import rhinopythonscripts.InfraPy as ip
+from rhinopythonscripts.RunCPythonScript import run as runC
+out = runC("someCPythonScript", argumentList)
+```
 
 ### Using GitHub to Download, Update, and Contribute
 
