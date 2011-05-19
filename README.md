@@ -17,7 +17,6 @@ For help and more information:
 * [Pro Git](http://www.progit.org) - For learning more about Git.
 * [StackOverflow](http://stackoverflow.com/) - For general programming questions.
 
----
 
 ## Currently Included Scripts
 
@@ -78,4 +77,36 @@ out = runC("someCPythonScript", argumentList)
 
 ### Using GitHub to Download, Update, and Contribute
 
+1. First, [install git](http://git-scm.com/) for your system and set it up.
+
+#### Forking
+
+1. [Fork the repository](http://help.github.com/fork-a-repo/) on GitHub.
+1. Get to the folder where you want things to be stored
+
+    * On Windows, open the Git Bash program, and use `cd foldername` and `cd ..` to get to the folder you want.
+    * On Mac, open Terminal and use `cd foldername` and `cd ..` to get to the folder you want.
+
+1. Using Terminal (Mac) or Git Bash (Windows), use git to clone the repository onto your computer by typing the following command:
+
+    `git clone git@github.com:yourusername/rhinopythonscripts.git` Where `yourusername` is replaced by your user name, obviously.
+
+1. Now you have created a folder, inside of whatever folder you were in, called `rhinopythonscripts`. Everything is inside of that folder and you can use it. :)
+
+#### Updating
+
 coming soon ...
+
+#### Contributing
+
+coming soon ...
+
+#### Quickly Patching Something in the Code
+
+coming soon ...
+
+#### Noting Issues
+
+coming soon ...
+ 
+
