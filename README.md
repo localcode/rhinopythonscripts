@@ -52,15 +52,19 @@ quickly get started. Here's how:
 6. In your script, write the following, and then save it (make sure it has the `.py` extension).
 
     ```python
+    # 'sys' is a built-in python module containing system utilities
     import sys
-    for i in sys.path:
-        print i
+    # sys.path is the list of folders that python can 'see'
+    for i in sys.path:   # for each folder path in the list:
+        print i          # print the folder path
     ```
 
-7. run the script using the `RunPythonScript` command in Rhino, or by simply pressing the green 'play' button in the Rhino python script editor. You should see a list of file paths to different folders.
-8. Make sure that the folder _containing_ your rhinopythonscripts folder is in the list of folders. If not, then add the following to your script (using the appropriate file path):
+7. Run the script using the `RunPythonScript` command in Rhino, or by simply pressing the green 'play' button in the Rhino python script editor. You should see a list of file paths to different folders.
+8. Make sure that the folder _containing_ your `rhinopythonscripts` folder is in the list of folders. If not, then add the following to your script (using the appropriate file path):
 
     ```python
+    # here we are appending a folder path to the list
+    # of folders that python can 'see'
     sys.path.append("the/path/to/the/folder/that/contains/rhinopythonscripts")
     ```
 
@@ -105,7 +109,7 @@ for directory in sys.path:
     print directory
 ```
 
-to add a folder to `sys.path`, assuming you already have the `import sys` line:
+To add a folder to `sys.path`, assuming you already have the `import sys` line:
 
 ```python
 sys.path.append("path/to/my/folder/that/contains/python/scripts")
