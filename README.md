@@ -38,6 +38,61 @@ For help and more information:
     A module with some very general functions for managing data. Not Rhino or IronPython specific.
 
 
+## Download and Getting Started (for beginners who don't want to learn about Git)
+
+
+You can easily download the entire collection of scripts in one folder, and
+quickly get started. Here's how:
+
+1. Choose a folder on your computer where you would like to keep downloaded scripts.
+2. Look for the link right here on [this webpage](https://github.com/bengolder/rhinopythonscripts) named 'Downloads'. Click on it, and then select the zip file.
+3. After you download the zip file, make sure that the unzipped folder is in the folder where you want to keep downloaded scripts. Rename the unzipped folder to `rhinopythonscripts`.
+4. The unzipped folder contains all the scripts in this repository. If you look in the folder, you'll notice a file called `__init__.py`, along with all the other scripts. In Python lingo, this folder is a [_package_](http://docs.python.org/tutorial/modules.html#packages) of [_modules_](http://docs.python.org/tutorial/modules.html).
+5. Start writing your own script. On Windows you can do this using the `EditPythonScript` Rhino command, which will open a script editor. On Mac or Windows, you can write a script with any basic text editor, and there are many to choose from. Some popular text editors for people who use Python are [TextMate](http://macromates.com/)(Mac), [E Text Editor](http://www.e-texteditor.com/) (Windows), [Notepad++](http://notepad-plus-plus.org/) (Windows), or you can set up a full [IDE](http://en.wikipedia.org/wiki/Integrated_development_environment) using [Steve Baer's helpful instructions](http://python.rhino3d.com/entries/12-Configuring-Pydev-for-Rhino.Python) on setting up [PyDev](http://pydev.org/). If you enjoy scripting in Rhino and using a command line, you might like [Vim](http://www.vim.org/download.php), which is a scriptable text editor that, like Rhino, includes a command line.
+6. In your script, write the following, and then save it (make sure it has the `.py` extension).
+
+    ```python
+    import sys
+    for i in sys.path:
+        print i
+    ```
+
+7. run the script using the `RunPythonScript` command in Rhino, or by simply pressing the green 'play' button in the Rhino python script editor. You should see a list of file paths to different folders.
+8. Make sure that the folder _containing_ your rhinopythonscripts folder is in the list of folders. If not, then add the following to your script (using the appropriate file path):
+
+    ```python
+    sys.path.append("the/path/to/the/folder/that/contains/rhinopythonscripts")
+    ```
+
+9. Add the following to the end of your script, and then run it again:
+
+    ```python
+    import rhinopythonscripts
+    ```
+
+10. If you don't see any errors when you run it, that means it's working. You can now import any of the functions from the package and use them in your own scripts. For example, the following code would move objects from one layer in your current Rhino document to another. You can add this to the end of your script and it should work (assuming both layers exist and you have objects on the first layer).
+
+    ```python
+    # first we import the switchLayers function from the Make2D module
+    from rhinopythonscripts.Make2D import switchLayers
+    # now we can run it. It will moves objects from the first layer
+    # to the second layer.
+    switchLayers("Layer 5000", "Layer 2999") 
+    ```
+    
+11. A couple quick ways to explore the package using python:
+
+    ```python
+    # .__doc__ will print out the docstring of a function or module
+    switchLayers.__doc__
+    # dir() will print out a list available commands for any module,
+    # function or object in python
+    dir(rhinopythonscripts.Make2D)
+    ```
+
+Enjoy! See above for more places to get help.
+
+
 ## Basic Use
 
 ### Checking Your Path
