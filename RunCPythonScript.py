@@ -53,6 +53,8 @@ def run_command(args, input=None):
     p.Start()
     if have_stdin:
         p.StandardInput.Write(input)
+    #p.BeginOutputReadLine() # I added this in hopes of dealing with the freeze
+    # in RhinoPython
     p.WaitForExit()
     stdout = p.StandardOutput.ReadToEnd()
     stderr = p.StandardError.ReadToEnd()
