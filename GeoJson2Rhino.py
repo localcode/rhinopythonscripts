@@ -17,8 +17,12 @@ import json
 
 # Import Rhino modules
 import Rhino
+<<<<<<< HEAD
 from Rhino.Geometry import *
 from scriptcontext import doc
+=======
+import Rhino.Geometry import *
+>>>>>>> 9f0762e5715d4585acc26366718336996afba0ee
 import rhinoscriptsyntax as rs
 
 # Import third party modules
@@ -26,6 +30,7 @@ import rhinoscriptsyntax as rs
 # Import local modules
 
 
+<<<<<<< HEAD
 
 geoJsonGeometryMap = {
         'Point':(PointToRhinoPoint, addPoint)
@@ -146,3 +151,10 @@ def load(rawGeoJsonData,
 
 
 
+=======
+def load( rawGeoJson, layer=None, geomType=None
+          moveToCenter=False, color=None
+          zAttributeField=None):
+    pass
+
+>>>>>>> 9f0762e5715d4585acc26366718336996afba0ee
