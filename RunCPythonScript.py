@@ -32,7 +32,7 @@ def return_filter(data):
         return outList
 
 
-def run_command(args, input=None):
+def run_command(args, input=None, verbose=False):
     """
     Run stuff on commandline.
     """
@@ -53,12 +53,28 @@ def run_command(args, input=None):
     p.Start()
     if have_stdin:
         p.StandardInput.Write(input)
-    p.WaitForExit()
+    if verbose:
+        while not p.HasExited:
+            p.Refresh()
+            print
+            print "%s -" % p.ToString()
+            print "-----------------------"
+            print "  physical memory usage: %s" % p.WorkingSet64
+            print "  base priority: %s" % p.BasePriority
+            print "  user processor time: %s" % p.UserProcessorTime
+            print "  privileged processor time: %s" % p.PrivilegedProcessorTime
+            print "  total processor time: %s" % p.TotalProcessorTime
+            if p.Responding:
+                print "Status = Running"
+            else:
+                print "Status = Not Responding"
+
+    p.WaitForExit(60000)
     stdout = p.StandardOutput.ReadToEnd()
     stderr = p.StandardError.ReadToEnd()
     return stdout, stderr, p.ExitCode
 
-def run(pathToPythonScript, argumentList=[], pathToPython='python'):
+def run(pathToPythonScript, argumentList=[], pathToPython='python', verbose=False):
     # docstring
     """
     Runs a python script using another version of python.
@@ -68,14 +84,14 @@ def run(pathToPythonScript, argumentList=[], pathToPython='python'):
     [2] exit code.
 
     Example Usage:
-    >>> # a module that prints "hella world"
+        >>> # a module that prints "hella world"
     >>> myModulePath = "C:\\Path\\To\\hella.py"
     >>> result = run(myModulePath)
     >>> print result
     ('hella world', '' ,0)
 
     Example 2:
-    >>> # a module that prints the sum of two numbers
+        >>> # a module that prints the sum of two numbers
     >>> myModulePath = "C:\\Path\\To\\my\\module.py"
     >>> arguments = [5.6, 3]
     >>> result = run(myModulePath, arguments)
@@ -83,7 +99,7 @@ def run(pathToPythonScript, argumentList=[], pathToPython='python'):
     (8.6, '' ,0)
 
     Example 3:
-    >>> # a module that prints "hella world"
+        >>> # a module that prints "hella world"
     >>> # and then prints the sum of two numbers
     >>> myModulePath = "C:\\Path\\To\\hella.py"
     >>> arguments = [5.6, 3]
@@ -95,7 +111,7 @@ def run(pathToPythonScript, argumentList=[], pathToPython='python'):
     python interpreter you would like to use (maybe you want
     a specific version, or you did not put the path to
     python in your `Path` Environmental Variable):
-    >>> pathToPythonInterpreter = "C:\\Python27\\python.exe"
+        >>> pathToPythonInterpreter = "C:\\Python27\\python.exe"
     >>> result = run(myModulePath, arguments, pathToPythonInterpreter)
     >>> print result
     (8.6,'',0)
@@ -110,7 +126,7 @@ def run(pathToPythonScript, argumentList=[], pathToPython='python'):
     if len(argumentList) > 0:
         for arg in argumentList:
             args.append(arg)
-    std_out, std_err, exit_code = run_command(args)
+    std_out, std_err, exit_code = run_command(args, verbose=verbose)
 
     return return_filter(std_out), std_err, exit_code
 
