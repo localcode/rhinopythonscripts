@@ -88,31 +88,43 @@ def MultiPolygonToRhinoCurve(coordinates):
 def GeometryCollectionToParser(geometries):
     pass # I need to figure this one out still
 
-def addPoint(rhPoint):
-    pass
+def addPoint(rhPoint, objAtt):
+    return doc.Objects.AddPoint(rhPoint, objAtt)
 
-def addPoints(rhPoints):
-    pass
+def addPoints(rhPoints, objAtt):
+    return doc.Objects.AddPoints(rhPoints, objAtt)
 
-def addCurve(rhCurve):
-    pass
+def addCurve(rhCurve, objAtt):
+    return doc.Objects.AddCurve(rhCurve, objAtt)
 
-def addCurves(rhCurves):
-    pass
+def addCurves(rhCurves, objAtt):
+    guidList = []
+    for curve in rhCurves:
+        guidList.append(addCurve(curve, objAtt))
+    return guidList
 
-def addPolygon(ringList):
-    pass
+def addPolygon(ringList, objAtt):
+    # for now this just makes curves
+    # but maybe it should make TrimmedSrfs
+    # or should group the rings
+    return addCurves(ringList, objAtt)
 
-def addPolygons(polygonList):
-    pass
+def addPolygons(polygonList, objAtt):
+    guidList = []
+    for polygon in polygonList:
+        # !! Extending the guid list !!!
+        guidList.extend(addPolygon(polygon, objAtt))
+    return guidList
 
 
 def load(rawGeoJsonData,
          destinationLayer=None,
          destinationLayerColor=System.Drawing.Color.Black):
+    # parse the data
     geoJson = json.loads(rawGeoJsonData)
+    # get the features
     jsonFeatures = geoJson['features']
-    rhFeatures = []
+    guidResults = []
     for jsonFeature in jsonFeatures:
 
         # set up object attributes
@@ -121,12 +133,6 @@ def load(rawGeoJsonData,
         if destinationLayer != None:
             att.LayerIndex = addRhinoLayer(destinationLayer,
                                            destinationLayerColor)
-        # deal with the geometry
-        geom = jsonFeature['geometry']
-        geomType = geom['type'] # this will return a mappable string
-        coordinates = geom['coordinates']
-        # translate the coordinates to Rhino.Geometry objects
-        rhFeature = geoJsonGeometryMap[geomType][0](coordinates)
 
         # deal with the properties
         if jsonFeature['properties']:
@@ -134,7 +140,21 @@ def load(rawGeoJsonData,
             for key in properties:
                 att.SetUserString(key, str(properties[key]))
 
-        doc.Objects.
+        # deal with the geometry
+        geom = jsonFeature['geometry']
+        geomType = geom['type'] # this will return a mappable string
+        coordinates = geom['coordinates']
+
+        # translate the coordinates to Rhino.Geometry objects
+        rhFeature = geoJsonGeometryMap[geomType][0](coordinates)
+
+        # return the GUID(s) for the feature
+        guidResults.append(geoJsonGeometryMap[geomType][1](rhFeature, att))
+
+    # return all the guids
+    return guidResults
+
+
 
 
 
