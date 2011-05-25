@@ -59,7 +59,8 @@ import Rhino
 from Rhino.Geometry import *
 from scriptcontext import doc
 
-
+# import .NET libraries
+import System
 
 
 geoJsonGeometryMap = {
@@ -151,15 +152,12 @@ def addPolygons(polygonList, objAtt):
         guidList.extend(addPolygon(polygon, objAtt))
     return guidList
 
-
-def load(rawGeoJsonData,
+def processGeoJson(parsedGeoJSON,
          destinationLayer=None,
          destinationLayerColor=System.Drawing.Color.Black):
 
-    # parse the data
-    geoJson = json.loads(rawGeoJsonData)
     # get the features
-    jsonFeatures = geoJson['features']
+    jsonFeatures = parsedGeoJson['features']
     guidResults = []
 
     for jsonFeature in jsonFeatures: # for each feature
@@ -190,6 +188,38 @@ def load(rawGeoJsonData,
 
     # return all the guids
     return guidResults
+
+def load(rawGeoJsonData,
+         destinationLayer=None,
+         destinationLayerColor=System.Drawing.Color.Black):
+    # parse the data
+    geoJson = json.loads(rawGeoJsonData)
+    return processGeoJson(geoJson)
+
+def loadLayers(rawJsonData):
+    """Loads a Json object that contains a set of GeoJSON objects in 'layers',
+    of the form:
+        {"layername":{"type":"FeatureCollection","features":[...]},
+         "layername2":{"type":"FeatureCollection","features":[...]},
+         }
+    For each layer name, it creates a separate Rhino Layer with the
+    corresponding name."""
+
+    # this needs a sub function that gets the number of keys and then creates a
+    # different color for each key
+    layersJson = json.loads(rawJsonData)
+
+    # make a list to hold all the guid results
+    allResults = []
+
+    for layerKey in layersJson: # for each layer
+        layerResults = processGeoJson(layersJson[layerKey],
+                destinationLayer=layerKey)
+        allResults.append(layerResults)
+
+    return allResults
+
+
 
 
 
