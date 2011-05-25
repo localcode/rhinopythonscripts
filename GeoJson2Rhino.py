@@ -1,7 +1,8 @@
 """
 Allows for the translation of GeoJSON data to Rhino objects
 
-Note that the GeoJSON data format is not 3D.
+I don't think GeoJSON format supports 3D, unfortunately, so I plan to add some
+3d functionality in which one could designate z attribute column names.
 
 The GeoJSON Format Specification can be found here:
     http://geojson.org/geojson-spec.html
@@ -9,6 +10,44 @@ The GeoJSON Format Specification can be found here:
 The RhinoCommon SDK (where all the Rhino.Geometry objects are documented) is
 here:
     http://www.rhino3d.com/5/rhinocommon/
+
+Example of Use:
+    >>> import GeoJson2Rhino as geoj
+    >>> myGeoJson = '''
+{ "type": "FeatureCollection",
+  "features": [
+    { "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [102.0, 0.5]},
+      "properties": {"prop0": "value0"}
+      },
+    { "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [102.0, 0.0], [103.0, 1.0], [104.0, 0.0], [105.0, 1.0]
+          ]
+        },
+      "properties": {
+        "prop0": "value0",
+        "prop1": 0.0
+        }
+      },
+    { "type": "Feature",
+       "geometry": {
+         "type": "Polygon",
+         "coordinates": [
+           [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0],
+             [100.0, 1.0], [100.0, 0.0] ]
+           ]
+       },
+       "properties": {
+         "prop0": "value0",
+         "prop1": {"this": "that"}
+         }
+       }
+     ]
+   }'''
+   >>> guidList = geoj.load(myGeoJson) #stores guids of new rhino objects
 
 """
 
@@ -19,11 +58,7 @@ import json
 import Rhino
 from Rhino.Geometry import *
 from scriptcontext import doc
-import rhinoscriptsyntax as rs
 
-# Import third party modules
-
-# Import local modules
 
 
 
@@ -120,12 +155,14 @@ def addPolygons(polygonList, objAtt):
 def load(rawGeoJsonData,
          destinationLayer=None,
          destinationLayerColor=System.Drawing.Color.Black):
+
     # parse the data
     geoJson = json.loads(rawGeoJsonData)
     # get the features
     jsonFeatures = geoJson['features']
     guidResults = []
-    for jsonFeature in jsonFeatures:
+
+    for jsonFeature in jsonFeatures: # for each feature
 
         # set up object attributes
         att = Rhino.DocObjects.ObjectAttributes()
