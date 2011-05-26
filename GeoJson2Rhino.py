@@ -156,84 +156,61 @@ geoJsonGeometryMap = {
 def processGeoJson(parsedGeoJson,
          destinationLayer=None,
          destinationLayerColor=System.Drawing.Color.Black):
-
     # get the features
     jsonFeatures = parsedGeoJson['features']
     guidResults = []
-
     for jsonFeature in jsonFeatures: # for each feature
-
         # set up object attributes
         att = Rhino.DocObjects.ObjectAttributes()
         # setup layer if requested
         if destinationLayer != None:
             att.LayerIndex = addRhinoLayer(destinationLayer,
                                            destinationLayerColor)
-
         # deal with the properties
         if jsonFeature['properties']:
             properties = jsonFeature['properties']
             for key in properties:
                 att.SetUserString(key, str(properties[key]))
-
         # deal with the geometry
         geom = jsonFeature['geometry']
         geomType = geom['type'] # this will return a mappable string
         coordinates = geom['coordinates']
-
         # translate the coordinates to Rhino.Geometry objects
         rhFeature = geoJsonGeometryMap[geomType][0](coordinates)
-
         # return the GUID(s) for the feature
         guidResults.append(geoJsonGeometryMap[geomType][1](rhFeature, att))
-
     # return all the guids
     return guidResults
 
 def load(rawGeoJsonData,
          destinationLayer=None,
          destinationLayerColor=System.Drawing.Color.Black):
-    # parse the data
-    geoJson = json.loads(rawGeoJsonData)
-    return processGeoJson(geoJson)
-
-def loadLayers(rawJsonData):
-    """Loads a Json object that contains a set of GeoJSON objects in 'layers',
-    of the form:
-        {"layername":{"type":"FeatureCollection","features":[...]},
-         "layername2":{"type":"FeatureCollection","features":[...]},
-         }
-    For each layer name, it creates a separate Rhino Layer with the
-    corresponding name."""
-
-    # this needs a sub function that gets the number of keys and then creates a
-    # different color for each key
-    if type(rawJsonData) == str:
-        layersJson = json.loads(rawJsonData)
-    elif type(rawJsonData) == dict:
-        layersJson = rawJsonData
-
-    # make a list to hold all the guid results
-    allResults = []
-
-    for layerKey in layersJson: # for each layer
-        layerResults = processGeoJson(layersJson[layerKey],
-                destinationLayer=layerKey)
-        allResults.append(layerResults)
-
-    return allResults
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # if the data already appears to be a dict literal ...
+    if type(rawJsonData) == dict:
+        jsonData = rawJsonData
+    else: # otherwise, just try to load it
+        jsonData = json.loads(rawJsonData)
+    # if this is just a GeoJSON ...
+    if jsonData["type"] == "FeatureCollection":
+        # process the GeoJSON, pass the layer and color in
+        return processGeoJson(jsonData, destinationLayer,
+                              destinationLayerColor)
+    # or if this is a set of layers from PostSites ...
+    elif jsonData["type"] == "LayerCollection":
+        # make a list for all the guids
+        allResults = []
+        layersList = jsonData['layers']
+        for layer in layersList: # for each layer
+            name = layer['name'] # get the name
+            if layer['color']: # get the color if it exists
+                color = layer['color']
+            else:
+                color = destinationLayerColor # or just make it black
+            geoJson = layer['contents'] # get the GeoJSON for this layer
+            # make it
+            layerResults = processGeoJson( geoJson, name, color )
+            allResults.append(layerResults)
+        return allResults
+    else:
+        return "This doesn't look like correctly formatted GeoJSON data.\nI'm not sure what to do with it, sorry."
 

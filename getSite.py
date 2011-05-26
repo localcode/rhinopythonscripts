@@ -12,4 +12,5 @@ scriptToRun = 'C:\\Users\\demonchaux\\Dropbox\\localcode\\postsites\\postsites.p
 path2python = 'C:\\Program Files (x86)\\Python26\\python.exe'
 vars = [45]
 results = runC(scriptToRun, vars, path2python)
-geoJ.loadLayers(results[0])
+print results[0]
+# geoJ.loadLayers(results[0])

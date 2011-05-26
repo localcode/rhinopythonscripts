@@ -128,7 +128,7 @@ def run(pathToPythonScript, argumentList=[], pathToPython='python', verbose=Fals
             args.append(arg)
     std_out, std_err, exit_code = run_command(args, verbose=verbose)
 
-    return return_filter(std_out), std_err, exit_code
+    return std_out, std_err, exit_code
 
 
 if __name__ == '__main__':
