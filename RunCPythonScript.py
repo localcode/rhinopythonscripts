@@ -17,7 +17,6 @@ def return_filter(data):
     way better.
     """
     outList = []
-    print data
     # downside to this: if you try to return strings with
     # trailing whitespace, that whitespace will disappear
     for d in data.rstrip().split('\r\n'):
@@ -131,4 +130,5 @@ def run(pathToPythonScript, argumentList=[], pathToPython='python', verbose=Fals
     return return_filter(std_out), std_err, exit_code
 
 
-
+if __name__ == '__main__':
+    pass
