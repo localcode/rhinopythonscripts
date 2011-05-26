@@ -22,6 +22,7 @@ def return_filter(data):
     for d in data.rstrip().split('\r\n'):
         try:
             # this should take care of everything but strings
+            # this is completely insane
             outList.append(eval(d))
         except:
             outList.append(d)
@@ -68,7 +69,7 @@ def run_command(args, input=None, verbose=False):
             else:
                 print "Status = Not Responding"
 
-    p.WaitForExit(60000)
+    p.WaitForExit()
     stdout = p.StandardOutput.ReadToEnd()
     stderr = p.StandardError.ReadToEnd()
     return stdout, stderr, p.ExitCode

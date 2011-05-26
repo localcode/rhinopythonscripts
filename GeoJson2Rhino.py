@@ -63,16 +63,6 @@ from scriptcontext import doc
 import System
 
 
-geoJsonGeometryMap = {
-        'Point':(PointToRhinoPoint, addPoint)
-        'MultiPoint':(MultiPointToRhinoPoint, addPoints)
-        'LineString':(LineStringToRhinoCurve, addCurve)
-        'MultiLineString':(MultiLineStringToRhinoCurve, addCurves)
-        'Polygon':(PolygonToRhinoCurve, addPolygon)
-        'MultiPolygon':(MultiPolygonToRhinoCurve, addPolygons)
-        'GeometryCollection':(GeometryCollectionToParser)
-        }
-
 def addRhinoLayer(layerName, layerColor=System.Drawing.Color.Black):
     """Creates a Layer in Rhino using a name and optional color. Returns the
     index of the layer requested. If the layer
@@ -152,7 +142,18 @@ def addPolygons(polygonList, objAtt):
         guidList.extend(addPolygon(polygon, objAtt))
     return guidList
 
-def processGeoJson(parsedGeoJSON,
+geoJsonGeometryMap = {
+        'Point':(PointToRhinoPoint, addPoint),
+        'MultiPoint':(MultiPointToRhinoPoint, addPoints),
+        'LineString':(LineStringToRhinoCurve, addCurve),
+        'MultiLineString':(MultiLineStringToRhinoCurve, addCurves),
+        'Polygon':(PolygonToRhinoCurve, addPolygon),
+        'MultiPolygon':(MultiPolygonToRhinoCurve, addPolygons),
+        'GeometryCollection':(GeometryCollectionToParser),
+        }
+
+
+def processGeoJson(parsedGeoJson,
          destinationLayer=None,
          destinationLayerColor=System.Drawing.Color.Black):
 
@@ -207,7 +208,10 @@ def loadLayers(rawJsonData):
 
     # this needs a sub function that gets the number of keys and then creates a
     # different color for each key
-    layersJson = json.loads(rawJsonData)
+    if type(rawJsonData) == str:
+        layersJson = json.loads(rawJsonData)
+    elif type(rawJsonData) == dict:
+        layersJson = rawJsonData
 
     # make a list to hold all the guid results
     allResults = []
