@@ -10,6 +10,29 @@ The RhinoCommon SDK (where all the Rhino.Geometry objects are documented) is
 here:
     http://www.rhino3d.com/5/rhinocommon/
 
+I have decided to extend the GeoJSON specification by adding support for one
+more type of geometry that would be really useful in Rhino (and elsewhere),
+the Mesh. Here is an example of a json Mesh:
+
+    {"type": "Feature",
+     "geometry": {
+                  "type": "Mesh",
+                  "coordinates": [
+                                  [3.43, 54.234, 2343.23],
+                                  [...],
+                                  [...],
+                                  ...,
+                                  ]
+                  "faces": [
+                            [0,3,2],
+                            [5,32,1],
+                            ...,
+                            ]
+                  }
+      "properties": {"prop0": "value0"}
+      }
+
+
 Example of Use:
     >>> import GeoJson2Rhino as geoj
     >>> myGeoJson = '''
@@ -77,11 +100,11 @@ def addRhinoLayer(layerName, layerColor=System.Drawing.Color.Black):
     return layerIndex
 
 def PointToRhinoPoint(coordinates):
-    x, y = coordinates[0], coordinates[1]
     if len(coordinates) > 2:
         z = coordinates[2]
     else:
         z = 0.0
+    x, y = coordinates[0], coordinates[1]
     return Point3d(x, y, z)
 
 def MultiPointToRhinoPoint(coordinates):
@@ -89,6 +112,17 @@ def MultiPointToRhinoPoint(coordinates):
     for pair in coordinates:
         rhPointList.append(PointToRhinoPoint(pair))
     return rhPointList
+
+def MeshToRhinoMesh(coordinates, faces):
+    rhMesh = Mesh()
+    for point in coordinates:
+        rhPoint = PointToRhinoPoint(point)
+        rhMesh.Vertices.Add(rhPoint)
+    for face in faces:
+        rhMesh.Faces.AddFace(face)
+    rhMesh.Normals.ComputeNormals()
+    rhMesh.Compact()
+    return rhMesh
 
 def LineStringToRhinoCurve(coordinates):
     rhPoints = MultiPointToRhinoPoint(coordinates)
@@ -144,6 +178,9 @@ def addPolygons(polygonList, objAtt):
         guidList.extend(addPolygon(polygon, objAtt))
     return guidList
 
+def addMesh(rhMesh, objAtt):
+    return doc.Objects.AddMesh(rhMesh, objAtt)
+
 geoJsonGeometryMap = {
         'Point':(PointToRhinoPoint, addPoint),
         'MultiPoint':(MultiPointToRhinoPoint, addPoints),
@@ -151,6 +188,7 @@ geoJsonGeometryMap = {
         'MultiLineString':(MultiLineStringToRhinoCurve, addCurves),
         'Polygon':(PolygonToRhinoCurve, addPolygon),
         'MultiPolygon':(MultiPolygonToRhinoCurve, addPolygons),
+        'Mesh':(MeshToRhinoMesh, addMesh),
         'GeometryCollection':(GeometryCollectionToParser),
         }
 
@@ -177,6 +215,10 @@ def processGeoJson(parsedGeoJson,
         geom = jsonFeature['geometry']
         geomType = geom['type'] # this will return a mappable string
         coordinates = geom['coordinates']
+        # if this is a mesh, pass the faces
+        if geomType == 'Mesh':
+            faces = geom['faces']
+            rhFeature = geoJsonGeometryMap[geomType][0](coordinates, faces)
         # translate the coordinates to Rhino.Geometry objects
         rhFeature = geoJsonGeometryMap[geomType][0](coordinates)
         # return the GUID(s) for the feature
