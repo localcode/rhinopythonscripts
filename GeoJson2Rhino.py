@@ -1,8 +1,7 @@
 """
 Allows for the translation of GeoJSON data to Rhino objects
 
-I don't think GeoJSON format supports 3D, unfortunately, so I plan to add some
-3d functionality in which one could designate z attribute column names.
+GeoJSON _does_ support 3d, so this can take 3d coordinates for 3d GeoJSONs
 
 The GeoJSON Format Specification can be found here:
     http://geojson.org/geojson-spec.html
@@ -79,7 +78,10 @@ def addRhinoLayer(layerName, layerColor=System.Drawing.Color.Black):
 
 def PointToRhinoPoint(coordinates):
     x, y = coordinates[0], coordinates[1]
-    z = 0.0
+    if len(coordinates) > 2:
+        z = coordinates[2]
+    else:
+        z = 0.0
     return Point3d(x, y, z)
 
 def MultiPointToRhinoPoint(coordinates):
@@ -159,13 +161,13 @@ def processGeoJson(parsedGeoJson,
     # get the features
     jsonFeatures = parsedGeoJson['features']
     guidResults = []
+    # set up object attributes
+    att = Rhino.DocObjects.ObjectAttributes()
+    # setup layer if requested
+    if destinationLayer != None:
+        att.LayerIndex = addRhinoLayer(destinationLayer,
+                                       destinationLayerColor)
     for jsonFeature in jsonFeatures: # for each feature
-        # set up object attributes
-        att = Rhino.DocObjects.ObjectAttributes()
-        # setup layer if requested
-        if destinationLayer != None:
-            att.LayerIndex = addRhinoLayer(destinationLayer,
-                                           destinationLayerColor)
         # deal with the properties
         if jsonFeature['properties']:
             properties = jsonFeature['properties']
@@ -182,7 +184,7 @@ def processGeoJson(parsedGeoJson,
     # return all the guids
     return guidResults
 
-def load(rawGeoJsonData,
+def load(rawJsonData,
          destinationLayer=None,
          destinationLayerColor=System.Drawing.Color.Black):
     # if the data already appears to be a dict literal ...
@@ -202,7 +204,7 @@ def load(rawGeoJsonData,
         layersList = jsonData['layers']
         for layer in layersList: # for each layer
             name = layer['name'] # get the name
-            if layer['color']: # get the color if it exists
+            if 'color' in layer: # get the color if it exists
                 color = layer['color']
             else:
                 color = destinationLayerColor # or just make it black

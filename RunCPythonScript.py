@@ -48,7 +48,8 @@ def run_command(args, input=None, verbose=False):
     p.StartInfo.FileName = args[0]
 
     # not a precise way to join these! See list2cmdline in CPython's subprocess.py for the proper way.
-    p.StartInfo.Arguments = ' '.join([str(a) for a in args[1:]])
+    cmd = ' '.join([str(a) for a in args[1:]])
+    p.StartInfo.Arguments = cmd
 
     p.Start()
     if have_stdin:
@@ -69,9 +70,9 @@ def run_command(args, input=None, verbose=False):
             else:
                 print "Status = Not Responding"
 
-    p.WaitForExit()
     stdout = p.StandardOutput.ReadToEnd()
     stderr = p.StandardError.ReadToEnd()
+    p.WaitForExit()
     return stdout, stderr, p.ExitCode
 
 def run(pathToPythonScript, argumentList=[], pathToPython='python', verbose=False):

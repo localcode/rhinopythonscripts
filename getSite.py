@@ -10,7 +10,6 @@ import GeoJson2Rhino as geoJ
 
 scriptToRun = 'C:\\Users\\demonchaux\\Dropbox\\localcode\\postsites\\postsites.py'
 path2python = 'C:\\Program Files (x86)\\Python26\\python.exe'
-vars = [45]
+vars = [135]
 results = runC(scriptToRun, vars, path2python)
-print results[0]
-# geoJ.loadLayers(results[0])
+geoJ.load(results[0])
