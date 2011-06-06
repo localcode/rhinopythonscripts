@@ -119,7 +119,9 @@ def MeshToRhinoMesh(coordinates, faces):
         rhPoint = PointToRhinoPoint(point)
         rhMesh.Vertices.Add(rhPoint)
     for face in faces:
-        rhMesh.Faces.AddFace(face)
+        i, j, k = tuple(face)
+        mFace = MeshFace(i, j, k)
+        rhMesh.Faces.AddFace(mFace)
     rhMesh.Normals.ComputeNormals()
     rhMesh.Compact()
     return rhMesh
@@ -220,7 +222,8 @@ def processGeoJson(parsedGeoJson,
             faces = geom['faces']
             rhFeature = geoJsonGeometryMap[geomType][0](coordinates, faces)
         # translate the coordinates to Rhino.Geometry objects
-        rhFeature = geoJsonGeometryMap[geomType][0](coordinates)
+        else:
+            rhFeature = geoJsonGeometryMap[geomType][0](coordinates)
         # return the GUID(s) for the feature
         guidResults.append(geoJsonGeometryMap[geomType][1](rhFeature, att))
     # return all the guids
