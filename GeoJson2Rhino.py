@@ -109,8 +109,8 @@ def PointToRhinoPoint(coordinates):
 
 def MultiPointToRhinoPoint(coordinates):
     rhPointList = []
-    for pair in coordinates:
-        rhPointList.append(PointToRhinoPoint(pair))
+    for point in coordinates:
+        rhPointList.append(PointToRhinoPoint(point))
     return rhPointList
 
 def MeshToRhinoMesh(coordinates, faces):
@@ -156,7 +156,10 @@ def addPoint(rhPoint, objAtt):
     return doc.Objects.AddPoint(rhPoint, objAtt)
 
 def addPoints(rhPoints, objAtt):
-    return doc.Objects.AddPoints(rhPoints, objAtt)
+    guidList = []
+    for rhPoint in rhPoints:
+        guidList.append(doc.Objects.AddPoint(rhPoint, objAtt))
+    return guidList
 
 def addCurve(rhCurve, objAtt):
     return doc.Objects.AddCurve(rhCurve, objAtt)
@@ -194,25 +197,12 @@ geoJsonGeometryMap = {
         'GeometryCollection':(GeometryCollectionToParser),
         }
 
+def setUserKeys(properties, objAttributes):
+    for key in properties:
+        objAttributes.SetUserString(key, str(properties[key]))
+    return objAttributes
 
-def processGeoJson(parsedGeoJson,
-         destinationLayer=None,
-         destinationLayerColor=System.Drawing.Color.Black):
-    # get the features
-    jsonFeatures = parsedGeoJson['features']
-    guidResults = []
-    # set up object attributes
-    att = Rhino.DocObjects.ObjectAttributes()
-    # setup layer if requested
-    if destinationLayer != None:
-        att.LayerIndex = addRhinoLayer(destinationLayer,
-                                       destinationLayerColor)
-    for jsonFeature in jsonFeatures: # for each feature
-        # deal with the properties
-        if jsonFeature['properties']:
-            properties = jsonFeature['properties']
-            for key in properties:
-                att.SetUserString(key, str(properties[key]))
+def jsonToRhinoCommon(jsonFeature):
         # deal with the geometry
         geom = jsonFeature['geometry']
         geomType = geom['type'] # this will return a mappable string
@@ -224,8 +214,31 @@ def processGeoJson(parsedGeoJson,
         # translate the coordinates to Rhino.Geometry objects
         else:
             rhFeature = geoJsonGeometryMap[geomType][0](coordinates)
+        return rhFeature
+
+def addJsonFeature(jsonFeature, objAttributes):
+        # deal with the properties
+        if jsonFeature['properties']:
+            objAttributes = setUserKeys(jsonFeature['properties'], objAttributes)
+        geomType = jsonFeature['geometry']['type']
+        rhFeature = jsonToRhinoCommon(jsonFeature)
         # return the GUID(s) for the feature
-        guidResults.append(geoJsonGeometryMap[geomType][1](rhFeature, att))
+        return geoJsonGeometryMap[geomType][1](rhFeature, objAttributes)
+
+def processGeoJson(parsedGeoJson,
+         destinationLayer=None,
+         destinationLayerColor=System.Drawing.Color.Black):
+    # get the features
+    jsonFeatures = parsedGeoJson['features']
+    guidResults = []
+    # set up object attributes
+    for jsonFeature in jsonFeatures: # for each feature
+        att = Rhino.DocObjects.ObjectAttributes()
+        # setup layer if requested
+        if destinationLayer != None:
+            att.LayerIndex = addRhinoLayer(destinationLayer,
+                                           destinationLayerColor)
+        guidResults.append(addJsonFeature(jsonFeature, att))
     # return all the guids
     return guidResults
 
