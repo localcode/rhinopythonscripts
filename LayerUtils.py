@@ -1,5 +1,8 @@
+import System
+
 import Rhino
 import scriptcontext
+
 
 
 def addRhinoLayer(layerName, layerColor=System.Drawing.Color.Black):
