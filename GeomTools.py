@@ -3,10 +3,10 @@ import Rhino
 
 def pointsToCircles(pointList, radii):
     circles = []
-    if len(radii) == 1:
-        radii = [radii[0] for n in range(len(pointList))]
     if type(radii) == float or type(radii) == int:
         radii = [radii for n in range(len(pointList))]
+    elif len(radii) == 1:
+        radii = [radii[0] for n in range(len(pointList))]
     for i in range(len(pointList)):
         point = pointList[i]
         radius = radii[i]

@@ -1,8 +1,11 @@
+from System.Collections.Generic import List
+
 import Rhino
 import scriptcontext
 from Smart import SmartFeature
+import RangeTools
 
-from Rhino.Geometry import Vector3d
+from Rhino.Geometry import Vector3d, Point3d, Plane, Curve
 
 def SmartCurveLayerProject(curveLayerName, surfaceLayerName,
         objectAttributes=None, vector=Vector3d(0.0,0.0,1.0),
@@ -67,6 +70,21 @@ def interpolatePointsToTerrainMesh(points, terrainMesh):
             # this appears to happen often.
             out.append(intResult[0]) # use the first intersection anyway
     return out
+
+
+def contourBrepInZ(brep, stepSize):
+    # get the upper and lower limits
+    bbox = brep.GetBoundingBox(True)
+    zMin, zMax = bbox.Min.Z, bbox.Max.Z
+    zRange = zMax-zMin
+    vect = Vector3d(0.0,0.0,1.0)
+    # the next line is dense
+    planes = [Plane(Point3d(0.0, 0.0, z), vect) for z in RangeTools.drange(zMin,zMax, 0.5)]
+    resultList = []
+    for plane in planes:
+        curves = brep.CreateContourCurves(brep, plane)
+        resultList.append(curves)
+    return resultList
 
 
 

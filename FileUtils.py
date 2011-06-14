@@ -79,5 +79,7 @@ def exportLayers(layerNames, filePath, version=4):
     #clear selection
     rs.UnselectAllObjects()
     # restore selection
-    scriptcontext.doc.Objects.Select.Overloads[SCG.IEnumerable[System.Guid]](oldSelection)
+    if oldSelection:
+        scriptcontext.doc.Objects.Select.Overloads[SCG.IEnumerable[System.Guid]](oldSelection)
+    print 'exported %s' % filePath
 
