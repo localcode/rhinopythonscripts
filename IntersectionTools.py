@@ -7,7 +7,21 @@ import RangeTools
 
 from Rhino.Geometry import Vector3d, Point3d, Plane, Curve
 
-def SmartCurveLayerProject(curveLayerName, surfaceLayerName,
+def smartPointProject(smartPoints, brep, vector=Vector3d(0.0,0.0,1.0), tolerance=0.001):
+    resultSet = []
+    # project everything
+    for smartPt in smartPoints:
+        result = Rhino.Geometry.Intersect.Intersection.ProjectPointsToBreps([brep],
+                [smartPt.geom],
+                vector, tolerance)
+        if len(result) > 0:
+            smartPt.geom = result[0]
+            resultSet.append(smartPt)
+    return resultSet
+
+
+
+def smartCurveLayerProject(curveLayerName, surfaceLayerName,
         objectAttributes=None, vector=Vector3d(0.0,0.0,1.0),
         tolerance=0.001):
     '''Project a layer contining only curves onto a layer containing a surface,

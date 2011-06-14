@@ -39,7 +39,7 @@ def replaceGeometries(smartFeatures, geometries):
         feature = smartFeatures[i]
         geometry = geometries[i]
         feature.geom = geometry
-        out.append(feature.geom)
+        out.append(feature)
     return out
 
 
