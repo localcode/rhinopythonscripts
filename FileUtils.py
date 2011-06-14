@@ -64,6 +64,7 @@ def importLayerDict(filePaths, layerNames):
     return dict(zip(layerNames, outObjs))
 
 def exportLayers(layerNames, filePath, version=4):
+    '''export only the items on designated layers to a file'''
     # save selection
     oldSelection = rs.SelectedObjects()
     # clear selection

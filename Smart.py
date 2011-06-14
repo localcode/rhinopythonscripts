@@ -30,3 +30,16 @@ class SmartFeature(object):
         return objectAttributes
 
 
+def RhinoObjectsToSmartFeatures(RhinoObjectList):
+    return [SmartFeature(obj) for obj in RhinoObjectList]
+
+def replaceGeometries(smartFeatures, geometries):
+    out = []
+    for i in range(len(smartFeatures)):
+        feature = smartFeatures[i]
+        geometry = geometries[i]
+        feature.geom = geometry
+        out.append(feature.geom)
+    return out
+
+
