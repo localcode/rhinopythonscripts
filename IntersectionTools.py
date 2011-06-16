@@ -19,7 +19,43 @@ def smartPointProject(smartPoints, brep, vector=Vector3d(0.0,0.0,1.0), tolerance
             resultSet.append(smartPt)
     return resultSet
 
-
+def smartPointLayerProject(pointLayerName, surfaceLayerName,
+        objectAttributes=None, vector=Vector3d(0.0,0.0,1.0),
+        tolerance=0.001):
+    '''Project a layer contining only points onto a layer containing a surface,
+    and maintain UserString associations between the original and projected points.
+    ObjectAttributes can be passed in to predetermine a layer or other data. Returns
+    a list of (Geometry, ObjAttributes) pairs, with user keys set. If anything fails,
+    should print an error message and return an empty set.'''
+    objs = scriptcontext.doc.Objects.FindByLayer(pointLayerName)
+    if len(objs) == 0:
+        print 'No Curves found on %s' % pointLayerName
+        return []
+    # get the surface(s)
+    srfObjs = scriptcontext.doc.Objects.FindByLayer(surfaceLayerName)
+    if len(srfObjs) == 0:
+        print 'no surfaces found on %s' % surfaceLayerName
+        return []
+    else:
+        srf = srfObjs[0].Geometry
+    # deal with ObjectAttributes
+    if objectAttributes:
+        att = objectAttributes
+    else:
+        att = Rhino.DocObjects.ObjectAttributes()
+    resultSet = []
+    # project everything
+    for ptObj in objs:
+        smartPt = SmartFeature(ptObj)
+        smartAtt = smartPt.objAttributes(att)
+        projPoints = Rhino.Geometry.Intersect.Intersection.ProjectPointsToBreps([srf],
+                [smartPt.geom.Location],
+                vector,
+                tolerance)
+        for pt in projPoints:
+            smartPair = (pt, smartAtt)
+            resultSet.append(smartPair)
+    return resultSet
 
 def smartCurveLayerProject(curveLayerName, surfaceLayerName,
         objectAttributes=None, vector=Vector3d(0.0,0.0,1.0),

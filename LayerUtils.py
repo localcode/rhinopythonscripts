@@ -25,19 +25,15 @@ def layerAttributes(layerName, layerColor=System.Drawing.Color.Black):
     att.LayerIndex = addRhinoLayer(layerName, layerColor)
     return att
 
-def deleteLayer(layer_index):
-    """Deletes a layer by index. returns nothing."""
+def deleteLayer(layerName, quiet=True):
+    """Deletes a layer by Name. returns nothing."""
+    layer_index = scriptcontext.doc.Layers.Find(layerName, True)
     settings = Rhino.DocObjects.ObjectEnumeratorSettings()
     settings.LayerIndexFilter = layer_index
     objs = scriptcontext.doc.Objects.FindByFilter(settings)
-    ids = []
-    for obj in objs:
-        obj.Attributes.Visible = True
-        obj.CommitChanges()
-        ids.append(obj.Id)
-    for id in ids:
-        scriptcontext.doc.Objects.Delete(id, True)
-    scriptcontext.doc.Layers.Delete(layer_index, True)
+    ids = [obj.Id for obj in objs]
+    scriptcontext.doc.Objects.Delete(ids, quiet)
+    scriptcontext.doc.Layers.Delete(layer_index, quiet)
 
 def switchLayers(fromLayer, toLayer):
     """gets the objects on fromLayer and moves them to toLayer."""
@@ -54,6 +50,22 @@ def restoreLayers():
         name = scriptcontext.doc.Layers.CurrentLayer.Name
         rs.LayerVisible(name, True)
     scriptcontext.doc.Layers.SetCurrentLayerIndex(0, True)
+
+def getLayerGeometry(layerName):
+    '''uses doc.Objects.FindByLayer and returns the Geometry of the
+    resulting RhinoObjects. If nothing found, returns an empty list.'''
+    out = []
+    for obj in scriptcontext.doc.Objects.FindByLayer(layerName):
+        out.append(obj.Geometry)
+    return out
+
+def getLayerGuids(layerName):
+    '''uses doc.Objects.FindByLayer and returns the Geometry of the
+    resulting RhinoObjects. If nothing found, returns an empty list.'''
+    out = []
+    for obj in scriptcontext.doc.Objects.FindByLayer(layerName):
+        out.append(obj.Id)
+    return out
 
 
 

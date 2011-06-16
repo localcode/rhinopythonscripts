@@ -30,6 +30,10 @@ def importFiles(filePathList):
         print 'Importing %s' % f
         scriptcontext.doc.ReadFile(f, opt)
 
+def importFile(filePath):
+    '''import one file.'''
+    importFiles([filePath])
+
 def deleteAll():
     """Deletes everything in the current Rhino scriptcontext.doc. Returns nothing."""
     guidList = []
