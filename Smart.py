@@ -12,17 +12,23 @@ class SmartFeature(object):
         if kind == tuple or kind == list:
             # build from geom, user string pair
             pair = rhinoObjectOrTuple
-            self.geom = pair[0] # geometry
+            self.geom = self._filterGeometry(pair[0]) # geometry
             self.attributes = pair[1] # properties (as dictionary)
         else: # assume RhinoObject
             rhObj = rhinoObjectOrTuple
-            self.geom = rhObj.Geometry
+            self.geom = self._filterGeom(rhObj.Geometry)
             self.attributes = {}
             numAtts = rhObj.Attributes.UserStringCount
             rawAtts = rhObj.Attributes.GetUserStrings()
             keys = rawAtts.AllKeys
             for key in keys:
                 self.attributes[key] = rhObj.Attributes.GetUserString(key)
+
+    def _filterGeom(self, geometry):
+        if type(geometry) == Rhino.Geometry.Point:
+            return geometry.Location
+        else:
+            return geometry
 
     def objAttributes(self, objectAttributes):
         for key in self.attributes:

@@ -1,6 +1,7 @@
 '''A module of tools for short simpel geometry conversions and calculations. This module is likely to be split up into pieces in the future.'''
 import Rhino
 import scriptcontext
+WorldXY = Rhino.Geometry.Plane.WorldXY
 
 def pointsToCircles(pointList, radii):
     circles = []
@@ -14,16 +15,22 @@ def pointsToCircles(pointList, radii):
         circles.append(Rhino.Geometry.Circle(point, radius))
     return circles
 
-def pointGrid(xrows=10, ycols=10, xspacing=1, yspacing=1):
+def pointGrid(xrows=10, ycols=10, xspacing=1, yspacing=1,
+        plane=WorldXY):
     xA = range(0, (xrows*xspacing), xspacing)
     yA = range(0, (ycols*yspacing), yspacing)
     xVals = [float(x-((xrows-1)*xspacing/2)) for x in xA]
     yVals = [float(y-((ycols-1)*yspacing/2)) for y in yA]
-    out = []
+    pts = []
     for y in yVals:
         for x in xVals:
-            out.append(Rhino.Geometry.Point3d(x, y, 0.0))
-    return out
+            pts.append(Rhino.Geometry.Point3d(x, y, 0.0))
+    if plane != WorldXY:
+        xform = Rhino.Geometry.Transform.PlaneToPlane(WorldXY,
+                plane)
+        # I think Transform modifies in place
+        [pt.Transform(xform) for pt in pts]
+    return pts
 
 def curveClosestPoint3d(curve, point, searchDistance=1000.0):
     '''enter curve and point (and optional max distance),

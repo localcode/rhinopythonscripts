@@ -3,6 +3,8 @@ import System
 import Rhino
 import scriptcontext
 
+import Smart
+
 
 
 def addRhinoLayer(layerName, layerColor=System.Drawing.Color.Black):
@@ -55,17 +57,27 @@ def getLayerGeometry(layerName):
     '''uses doc.Objects.FindByLayer and returns the Geometry of the
     resulting RhinoObjects. If nothing found, returns an empty list.'''
     out = []
-    for obj in scriptcontext.doc.Objects.FindByLayer(layerName):
-        out.append(obj.Geometry)
+    objs = scriptcontext.doc.Objects.FindByLayer(layerName)
+    if objs:
+        for obj in objs:
+            out.append(obj.Geometry)
     return out
 
 def getLayerGuids(layerName):
     '''uses doc.Objects.FindByLayer and returns the Geometry of the
     resulting RhinoObjects. If nothing found, returns an empty list.'''
     out = []
-    for obj in scriptcontext.doc.Objects.FindByLayer(layerName):
-        out.append(obj.Id)
+    objs = scriptcontext.doc.Objects.FindByLayer(layerName)
+    if objs:
+        for obj in scriptcontext.doc.Objects.FindByLayer(layerName):
+            out.append(obj.Id)
     return out
 
+def getLayerSmartFeatures(layerName):
+    out = []
+    objs = scriptcontext.doc.Objects.FindByLayer(layerName)
+    if objs and len(objs) > 0:
+        out = Smart.RhinoObjectsToSmartFeatures(objs)
+    return out
 
 

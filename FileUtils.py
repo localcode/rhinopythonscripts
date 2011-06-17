@@ -9,6 +9,8 @@ from Rhino.FileIO import FileWriteOptions, FileReadOptions
 import scriptcontext
 import rhinoscriptsyntax as rs
 
+import LayerUtils
+
 
 def exportFile(filePath,
         version=4,
@@ -67,8 +69,19 @@ def importLayerDict(filePaths, layerNames):
         outObjs.append(objs)
     return dict(zip(layerNames, outObjs))
 
+def importSmartLayerDict(filePaths, layerNames):
+    '''Input a list of filePaths and a list of layerNames, in order to import all the
+    files and return a list of SmartFeatures corresponding to each layer.
+    Layers that do not exist or contain no objects will return empty lists.'''
+    importFiles(filePaths)
+    outFeatures = []
+    for ln in layerNames:
+        features = LayerUtils.getLayerSmartFeatures(ln)
+        outFeatures.append(features)
+    return dict(zip(layerNames, outFeatures))
+
 def exportLayers(layerNames, filePath, version=4):
-    '''export only the items on designated layers to a file'''
+    '''Export only the items on designated layers to a file.'''
     # save selection
     oldSelection = rs.SelectedObjects()
     # clear selection
