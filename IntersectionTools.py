@@ -34,7 +34,7 @@ def smartPointLayerProject(pointLayerName, surfaceLayerName,
     # get the surface(s)
     srfObjs = scriptcontext.doc.Objects.FindByLayer(surfaceLayerName)
     if len(srfObjs) == 0:
-        print 'no surfaces found on %s' % surfaceLayerName
+        print 'No Surfaces found on %s' % surfaceLayerName
         return []
     else:
         srf = srfObjs[0].Geometry
@@ -49,7 +49,7 @@ def smartPointLayerProject(pointLayerName, surfaceLayerName,
         smartPt = SmartFeature(ptObj)
         smartAtt = smartPt.objAttributes(att)
         projPoints = Rhino.Geometry.Intersect.Intersection.ProjectPointsToBreps([srf],
-                [smartPt.geom.Location],
+                [smartPt.geom],
                 vector,
                 tolerance)
         for pt in projPoints:
