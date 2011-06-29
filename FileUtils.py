@@ -29,7 +29,7 @@ def importFiles(filePathList):
     opt = FileReadOptions()
     opt.ImportMode = True
     for f in filePathList:
-        print 'Importing %s' % f
+        #print 'Importing %s' % f
         scriptcontext.doc.ReadFile(f, opt)
 
 def importFile(filePath):
@@ -98,5 +98,5 @@ def exportLayers(layerNames, filePath, version=4):
     # restore selection
     if oldSelection:
         scriptcontext.doc.Objects.Select.Overloads[SCG.IEnumerable[System.Guid]](oldSelection)
-    print 'exported %s' % filePath
+    #print 'exported %s' % filePath
 
