@@ -9,7 +9,7 @@ from Rhino.FileIO import FileWriteOptions, FileReadOptions
 import scriptcontext
 import rhinoscriptsyntax as rs
 
-import LayerUtils
+import LayerTools
 
 
 def exportFile(filePath,
@@ -31,6 +31,38 @@ def importFiles(filePathList):
     for f in filePathList:
         #print 'Importing %s' % f
         scriptcontext.doc.ReadFile(f, opt)
+
+def silentImport(filePathList):
+    """Takes one or more file paths and returns RhinoCommon
+    File3dm objects for each file, if they exist. Returns an empty
+    list if no file is found.
+    """
+    models = []
+    if type(filePathList) == str: # assume it's one path
+        filePathList = [filePathList]
+    for f in filePathList:
+        model = Rhino.FileIO.File3dm.Read(f)
+        if not model: continue
+        models.append(model)
+    return models
+
+def modelsToLayerGeometryDict(models):
+    out = {}
+    for m in models:
+        for layer in m.Layers:
+            name = layer.Name
+            out[name] = []
+            objs = m.Objects.FindByLayer(name)
+            for obj in objs:
+                geom = obj.Geometry
+                geom.EnsurePrivateCopy()
+                out[name].append(geom)
+        m.Dispose()
+    return out
+
+def fileGeometryDict(fileNames):
+    models = silentImport(fileNames)
+    return modelsToLayerGeometryDict(models)
 
 def importFile(filePath):
     '''import one file.'''
@@ -58,15 +90,24 @@ def importLayers(filePaths, layerNames):
         outObjs.append(objs)
     return outObjs
 
-def importLayerDict(filePaths, layerNames):
+def importLayerGeometryDict(filePaths, layerNames=None, silent=True):
     '''Input a list of filePaths and a list of layerNames, in order to import all the
     files and return a list of RhinoObjects on each layer, in corresponding layers.
     Layers that do not exist or contain no objects will return empty lists.'''
     outObjs = []
     importFiles(filePaths)
+    if not layerNames:
+        layerNames = []
+        # get all the layers
+        lyrTable = scriptcontext.doc.Layers
+        for lyr in lyrTable:
+            layerNames.append(lyr.FullPath)
     for ln in layerNames:
         objs = scriptcontext.doc.Objects.FindByLayer(ln)
-        outObjs.append(objs)
+        if objs:
+            outObjs.append([obj.Geometry for obj in objs])
+        else:
+            outObjs.append([])
     return dict(zip(layerNames, outObjs))
 
 def importSmartLayerDict(filePaths, layerNames):
@@ -76,7 +117,7 @@ def importSmartLayerDict(filePaths, layerNames):
     importFiles(filePaths)
     outFeatures = []
     for ln in layerNames:
-        features = LayerUtils.getLayerSmartFeatures(ln)
+        features = LayerTools.getLayerSmartFeatures(ln)
         outFeatures.append(features)
     return dict(zip(layerNames, outFeatures))
 

@@ -71,24 +71,36 @@ def rotateMany(listOfThings, radiansAngle, axisVector, origin):
         out.append(thing.Rotate(radiansAngle, axisVector, origin))
     return out
 
-def bakeMany(listOfThings, objectAttributes=None):
+def bakeMany(listOfThings, objectAttributes=None, translationVector=None):
+    idsOut = []
     if not objectAttributes:
         objectAttributes = Rhino.DocObjects.ObjectAttributes()
+    if translationVector:
+        movedList = []
+        for thing in listOfThings:
+            if thing:
+                thing.Translate(translationVector)
+            movedList.append(thing)
+        listOfThings = movedList
     for thing in listOfThings:
         # move from specific to broad
         if isinstance(thing, Rhino.Geometry.Point3d):
-            scriptcontext.doc.Objects.AddPoint(thing, objectAttributes)
+            idsOut.append(scriptcontext.doc.Objects.AddPoint(thing, objectAttributes))
         elif isinstance(thing, Rhino.Geometry.Curve):
-            scriptcontext.doc.Objects.AddCurve(thing, objectAttributes)
+            idsOut.append(scriptcontext.doc.Objects.AddCurve(thing, objectAttributes))
         elif isinstance(thing, Rhino.Geometry.Brep):
-            scriptcontext.doc.Objects.AddBrep(thing, objectAttributes)
+            idsOut.append(scriptcontext.doc.Objects.AddBrep(thing, objectAttributes))
         elif isinstance(thing, Rhino.Geometry.Surface):
-            scriptcontext.doc.Objects.AddSurface(thing, objectAttributes)
+            idsOut.append(scriptcontext.doc.Objects.AddSurface(thing, objectAttributes))
         elif isinstance(thing, Rhino.Geometry.Mesh):
-            scriptcontext.doc.Objects.AddSurface(thing, objectAttributes)
+            idsOut.append(scriptcontext.doc.Objects.AddMesh(thing, objectAttributes))
         elif isinstance(thing, Rhino.Geometry.Hatch):
-            scriptcontext.doc.Objects.AddHatch(thing, objectAttributes)
+            idsOut.append(scriptcontext.doc.Objects.AddHatch(thing, objectAttributes))
         elif isinstance(thing, Rhino.Display.Text3d):
-            scriptcontext.doc.Objects.AddText(thing, objectAttributes)
+            idsOut.append(scriptcontext.doc.Objects.AddText(thing, objectAttributes))
+        else:
+            print 'this here was a thang I couldnay bake:'
+            print thing
+    return idsOut
 
 
