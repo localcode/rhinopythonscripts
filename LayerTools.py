@@ -63,6 +63,14 @@ def getLayerGeometry(layerName):
             out.append(obj.Geometry)
     return out
 
+def layerNames():
+    '''Returns a list of strings, the name of each layer in the current
+    document.'''
+    names = []
+    for l in scriptcontext.doc.Layers:
+        names.append(l.Name)
+    return names
+
 def getLayerGuids(layerName):
     '''uses doc.Objects.FindByLayer and returns the Geometry of the
     resulting RhinoObjects. If nothing found, returns an empty list.'''

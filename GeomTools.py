@@ -3,6 +3,23 @@ import Rhino
 import scriptcontext
 WorldXY = Rhino.Geometry.Plane.WorldXY
 
+def getObjsByGeomType(geomType):
+    filtr  = Rhino.DocObjects.ObjectEnumeratorSettings()
+    filtr.VisibleFilter = True
+    all_objs = scriptcontext.doc.Objects.FindByFilter(filtr)
+    right_objs = [o for o in all_objs if isinstance(o.Geometry, geomType)]
+    return right_objs
+
+def getSelected():
+    filtr  = Rhino.DocObjects.ObjectEnumeratorSettings()
+    filtr.SelectedObjectsFilter = True
+    all_objs = scriptcontext.doc.Objects.FindByFilter(filtr)
+    return all_objs
+
+def brepToCurves(brep):
+    edges = brep.Edges
+    return [e.DuplicateCurve() for e in edges]
+
 def pointsToCircles(pointList, radii):
     circles = []
     if type(radii) == float or type(radii) == int:

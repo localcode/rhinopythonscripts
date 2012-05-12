@@ -9,8 +9,28 @@ from Rhino.FileIO import FileWriteOptions, FileReadOptions
 import scriptcontext
 import rhinoscriptsyntax as rs
 
+import xlrd
 import LayerTools
 
+def xlsToObjs(filePath, headers=True):
+    '''converts xls rows to a list of dictionaries. first row headers become
+    the attribute names.'''
+    wb = xlrd.open_workbook(filePath)
+    sheet = wb.sheet_by_index(0)
+    if headers:
+        # get the first row
+        head = sheet.row_values(0)
+        objs = []
+        # get the rows
+        for r in range(sheet.nrows - 1):
+            r += 1 # shift down a row
+            obj = {}
+            vals = sheet.row_values(r)
+            for c, v in enumerate(vals):
+                # lookup key by column index
+                obj[head[c]] = v
+            objs.append(obj)
+        return objs
 
 def exportFile(filePath,
         version=4,
